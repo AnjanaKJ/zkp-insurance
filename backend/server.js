@@ -4,6 +4,7 @@ const morgan = require('morgan');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const ehrRoutes = require('./routes/ehrRoutes');
+const verifyRoutes = require('./routes/verifyRoutes');
 const reclaimRoutes = require('./routes/reclaimRoutes');
 
 require('dotenv').config();
@@ -21,6 +22,7 @@ app.get('/', (req, res) => {
 
 app.use('/api/reclaim', reclaimRoutes);
 app.use('/api/data', ehrRoutes);
+app.use('/api/verify', verifyRoutes);
 
 mongoose.connect(process.env.MONGODB_URL, {
 //  useNewUrlParser: true,
