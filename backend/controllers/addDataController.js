@@ -1,29 +1,34 @@
-const User = require('../models/User');  // Import the User model
+const User = require('../models/User');
 
-// Controller to add user data to the database
 exports.addUserData = async (req, res) => {
   try {
-    const { did, ehrData } = req.body; // Extract data from the request body
-    console.log(did,ehrData);
-    // Validate the input data
-//    if (!did || !ehrData) {
-//      return res.status(400).json({ message: "Both 'did' and 'ehrData' are required." });
-//    }
 
-    // Create a new user object
+    const { did, diseases } = req.body;
+    console.log(did, diseases);
+
+    if (!did || !Array.isArray(diseases) || diseases.length === 0) {
+      return res.status(400).json({
+        message: "Both 'uuid' and a non-empty 'diseases' array are required."
+      });
+    }
+
     const newUser = new User({
       did,
-      ehrData
+      diseases
     });
 
-    // Save the new user to the database
     await newUser.save();
 
-    // Send success response
-    return res.status(201).json({ message: 'User data added successfully!', user: newUser });
+    return res.status(201).json({
+      message: 'User data added successfully!',
+      user: newUser
+    });
   } catch (error) {
-    // Handle errors
     console.error("Error adding user data:", error);
-    return res.status(500).json({ message: 'Internal server error', error: error.message });
+    return res.status(500).json({
+      message: 'Internal server error',
+      error: error.message
+    });
   }
 };
+
