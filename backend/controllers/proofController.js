@@ -160,7 +160,7 @@ const checkEligibility = async (req, res) => {
     // Verify proof
     const tx = contract.methods.verifyProof(pi_a, pi_b, pi_c, publicSignals);
     const gasEstimate = await tx.estimateGas({ from: account.address });
-
+    console.log(tx.call({ from: account.address }));
     const txData = {
       from: account.address,
       to: contractAddress,
@@ -173,9 +173,9 @@ const checkEligibility = async (req, res) => {
     const receipt = await web3.eth.sendSignedTransaction(signedTx.rawTransaction);
 
     if (receipt.status) {
-      const isEligible = publicSignals[0];
+      const isEligible = parseInt(publicSignals[0], 10);
 
-      if (isEligible) {
+      if (isEligible===1) {
         res.status(200).json({
           success: true,
           message: "Eligible for insurance claim",
